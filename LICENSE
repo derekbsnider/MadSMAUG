@@ -1,0 +1,58 @@
+MadSMAUG — License Notice
+==========================
+
+MadSMAUG is a port of SMAUG 1.8 to the Mad-C (madc) language. Because
+SMAUG 1.8 is itself derived from Merc, which is derived from DikuMUD,
+the source files in this repository inherit a stack of license
+obligations from each upstream layer.
+
+Applicable licenses, preserved verbatim:
+
+  * LICENSE.diku   — Original DikuMUD license (pre-2020).
+  * LICENSE.merc   — Merc 2.x license (extends Diku).
+  * LICENSE.smaug  — SMAUG 1.8 license (extends Merc).
+
+All three apply to every source file in this repository that is
+derived from SMAUG code (i.e. the contents of `src/` and
+`upstream/smaug1.8.tgz`). You must read and comply with all three.
+
+Short summary of the combined obligations (not a substitute for
+reading the actual licenses):
+
+  * Non-commercial only. You must NOT charge money for MUDs running
+    this code, or for the right to play on one. See LICENSE.diku
+    and LICENSE.smaug.
+  * Preserve attribution. Original author credits, copyright notices,
+    and the login-screen / help-file acknowledgements required by
+    the Diku and SMAUG licenses must remain intact.
+  * Share source. Derivative works must make source available on the
+    same terms.
+  * Compensation in bug reports. Per the Merc license, if you find
+    a bug you are asked (not required) to report it upstream.
+
+A note on the 2020 DikuMUD relicense
+------------------------------------
+
+In 2020, the original DikuMUD team (Hans H. Staerfeldt, Katja Nyboe,
+Tom Madsen, Michael Seifert, Sebastian Hammer) re-released the
+*original DikuMUD codebase* under the GNU LGPL. That relicense applies
+to *their* original Diku code, but does NOT retroactively change the
+licenses on derivative works (Merc, SMAUG) made before 2020 under the
+older Diku terms. Merc and SMAUG remain governed by LICENSE.merc and
+LICENSE.smaug respectively, and the Diku obligations from that era
+still flow through into them. See LICENSE.smaug's own preamble for
+the authors' intent here.
+
+If you are unsure whether a particular use is permitted, consult the
+actual license text of each layer, and err on the side of the most
+restrictive.
+
+The madc tool
+-------------
+
+The Mad-C compiler itself is a separate project with its own license
+(MPL 2.0). This repository depends on madc at build time, but madc
+is not covered by the licenses listed here:
+
+  * madc repository: https://github.com/derekbsnider/madc
+  * madc license: Mozilla Public License 2.0

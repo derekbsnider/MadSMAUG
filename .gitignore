@@ -1,0 +1,18 @@
+# Extracted upstream SMAUG tree — can always be re-created from the
+# tarball. Keeping the tarball itself in git for provenance.
+upstream/smaug1.8/
+
+# Runtime data directories (if a MUD is actually run from this tree).
+area/
+boards/
+classes/
+clans/
+councils/
+deity/
+gods/
+houses/
+log/
+player/
+races/
+system/
+vault/
