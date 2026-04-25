@@ -32,16 +32,26 @@
 #include "upstream_src/ban.c"
 #include "upstream_src/comments.c"
 #include "upstream_src/const.c"
-// clans.c parses cleanly with the parseFunction param-loop hardening
-// (no more SIGSEGV) but leaves persistent parser state that breaks
-// later struct-init parsing in const.c (`liq_table` nested
-// initializer); needs focused investigation next session.
-// #include "upstream_src/clans.c"
+#include "upstream_src/clans.c"
 #include "upstream_src/colorize.c"
 #include "upstream_src/deity.c"
 #include "upstream_src/hint.c"
 #include "upstream_src/grub.c"
 #include "upstream_src/comm.c"
+#include "upstream_src/tables.c"
+#include "upstream_src/save.c"
+#include "upstream_src/misc.c"
+#include "upstream_src/reset.c"
+#include "upstream_src/mapout.c"
+#include "upstream_src/special.c"
+#include "upstream_src/variables.c"
+// update.c hits IRBuilder::coerce() unsupported type conversion;
+// next session.
+// #include "upstream_src/update.c"
+#include "upstream_src/imm_host.c"
+#include "upstream_src/polymorph.c"
+#include "upstream_src/planes.c"
+#include "upstream_src/house.c"
 #include "_bootstrap_comm_shim.c"
 #include "ibuild.c"
 #include "ident.c"
