@@ -40,6 +40,7 @@
 #include "upstream_src/deity.c"
 #include "upstream_src/hint.c"
 #include "upstream_src/grub.c"
+#include "upstream_src/comm.c"
 #include "_bootstrap_comm_shim.c"
 #include "ibuild.c"
 #include "ident.c"
