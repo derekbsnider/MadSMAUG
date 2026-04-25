@@ -32,8 +32,10 @@
 #include "upstream_src/ban.c"
 #include "upstream_src/comments.c"
 #include "upstream_src/const.c"
-// clans.c crashes the parser (SIGSEGV) on its struct-literal
-// initializer pattern; needs a focused fix next session.
+// clans.c parses cleanly with the parseFunction param-loop hardening
+// (no more SIGSEGV) but leaves persistent parser state that breaks
+// later struct-init parsing in const.c (`liq_table` nested
+// initializer); needs focused investigation next session.
 // #include "upstream_src/clans.c"
 #include "upstream_src/colorize.c"
 #include "upstream_src/deity.c"
