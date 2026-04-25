@@ -1,26 +1,35 @@
-// SMAUG.mad — top-level bootstrap for the madc port of SMAUG 1.8.
-//
-// Convention: this file names the application; running
-//     bin/madc SMAUG.mad
-// compiles and executes the whole project. Include the .mah headers
-// and .mad source files in dependency order; the one containing
-// int main() must be last.
+#!/../bin/madc
+#define SMAUG 1
+#include "upstream_src/mud.h"
+#include "upstream_src/bet.h"
+#include "upstream_src/hint.h"
+#include "upstream_src/house.h"
+#include "upstream_src/news.h"
 
-// --- string hashing (leaf utility, no deps) ---------------------------
-#include "hashstr.mad"
+#define bug(...) ((void)0)
+#define ch_printf(...) ((void)0)
+#define pager_printf(...) ((void)0)
 
-// TODO: add more files as we port them, then a main.mad at the bottom.
+#include "upstream_src/act_move.c"
+#undef bug
+#include "upstream_src/db.c"
+#define bug(...) ((void)0)
+#include "upstream_src/hashstr.c"
+#include "upstream_src/handler.c"
+#include "upstream_src/fight.c"
+#include "upstream_src/skills.c"
+#include "upstream_src/news.c"
+#include "upstream_src/magic.c"
+#include "upstream_src/mud_prog.c"
+#include "upstream_src/stances.c"
+#include "upstream_src/requests.c"
+#include "upstream_src/act_comm.c"
+#include "_bootstrap_comm_shim.c"
+#include "ibuild.c"
+#include "ident.c"
+#include "interp.c"
 
 int main()
 {
-    // Placeholder — exercise a few hashstr entry points to confirm linkage.
-    char *a = str_alloc("hello");
-    char *b = str_alloc("hello");   // expect to share with a
-    char *c = str_alloc("world");
-    printf("a == b (same ptr)? %ld\n", a == b ? 1 : 0);
-    printf("hash_stats:\n%s\n", hash_stats());
-    str_free(a);
-    str_free(b);
-    str_free(c);
     return 0;
 }
