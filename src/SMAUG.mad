@@ -44,7 +44,9 @@
 #include "upstream_src/reset.c"
 #include "upstream_src/mapout.c"
 #include "upstream_src/special.c"
-#include "upstream_src/variables.c"
+// variables.c triggers IRBuilder::coerce() char*->string in some
+// statement; deferred. delete_variable stubbed in shim.
+// #include "upstream_src/variables.c"
 // update.c hits IRBuilder::coerce() unsupported type conversion;
 // next session.
 // #include "upstream_src/update.c"
