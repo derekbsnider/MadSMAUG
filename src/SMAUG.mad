@@ -24,6 +24,19 @@
 #include "upstream_src/stances.c"
 #include "upstream_src/requests.c"
 #include "upstream_src/act_comm.c"
+#include "upstream_src/act_obj.c"
+#include "upstream_src/boards.c"
+#include "upstream_src/act_wiz.c"
+#include "upstream_src/ban.c"
+#include "upstream_src/comments.c"
+#include "upstream_src/const.c"
+// clans.c hits "TokenStmt::compile() unexpected token type=25
+// (ttStructLit)" — a struct-literal still escaping at statement
+// position. Deferred for next session.
+// #include "upstream_src/clans.c"
+#include "upstream_src/colorize.c"
+#include "upstream_src/deity.c"
+#include "upstream_src/hint.c"
 #include "_bootstrap_comm_shim.c"
 #include "ibuild.c"
 #include "ident.c"
