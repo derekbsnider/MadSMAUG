@@ -1,11 +1,16 @@
 #!/../bin/madc
 #define SMAUG 1
+#include <stdio.h>
 #include <crypt.h>
 #include "upstream_src/mud.h"
 #include "upstream_src/bet.h"
 #include "upstream_src/hint.h"
 #include "upstream_src/house.h"
 #include "upstream_src/news.h"
+#include "upstream_src/imc-mercdefs.h"
+#include "upstream_src/imc-mercbase.h"
+#include "upstream_src/imc-config.h"
+#include "upstream_src/imc.h"
 
 #define bug(...) ((void)0)
 #define ch_printf(...) ((void)0)
@@ -45,22 +50,39 @@
 #include "upstream_src/mapout.c"
 #include "upstream_src/special.c"
 #include "upstream_src/makeobjs.c"
-// variables.c triggers IRBuilder::coerce() char*->string in some
-// statement; deferred. delete_variable stubbed in shim.
-// #include "upstream_src/variables.c"
-// update.c hits IRBuilder::coerce() unsupported type conversion;
-// next session.
-// #include "upstream_src/update.c"
+#include "upstream_src/variables.c"
+#include "upstream_src/update.c"
 #include "upstream_src/imm_host.c"
 #include "upstream_src/polymorph.c"
 #include "upstream_src/planes.c"
 #include "upstream_src/house.c"
+#include "upstream_src/starmap.c"
+#include "upstream_src/mud_comm.c"
+#include "upstream_src/player.c"
+#include "upstream_src/adminlist.c"
+#include "upstream_src/track.c"
+#include "upstream_src/build.c"
+#include "upstream_src/stat_obj.c"
+#include "upstream_src/renumber.c"
+#include "upstream_src/services.c"
+#include "upstream_src/mpxset.c"
+#include "upstream_src/shops.c"
 #include "_bootstrap_comm_shim.c"
 #include "ibuild.c"
 #include "ident.c"
 #include "interp.c"
 
-int main()
+// Both function-scope and file-scope writes to fpLOG/fpReserve from
+// our SMAUG.mad don't reach the db.c-defined globals — madc seems to
+// shadow them. Workaround: stub boot_log so the fclose(fpLOG) crash
+// doesn't fire (handled in _bootstrap_comm_shim.c).
+
+int main(int argc, char **argv)
 {
+    fprintf(stderr, "[init] fpLOG=%p fpReserve=%p\n", (void*)fpLOG, (void*)fpReserve);
+    fputs("[probe] before boot_db\n", stdout); fflush(stdout);
+    boot_db();
+    fputs("[probe] after boot_db\n", stdout); fflush(stdout);
+    exit(0);
     return 0;
 }
