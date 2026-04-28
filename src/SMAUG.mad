@@ -7,10 +7,19 @@
 #include "upstream_src/hint.h"
 #include "upstream_src/house.h"
 #include "upstream_src/news.h"
+// IMC (Inter-Mud Communication) is an optional federation feature
+// in upstream SMAUG 1.8. Real installs `#ifdef IMC`-out when not
+// running it. Defer all IMC ingestion until the non-IMC umbrella
+// runs end-to-end; ingesting IMC just to bump parse % is hollow
+// progress. Headers ingest cleanly today (post-`##` and
+// `__attribute__` lexer fixes) — uncomment under `#ifdef IMC`
+// once core runtime works.
+#ifdef IMC
 #include "upstream_src/imc-mercdefs.h"
 #include "upstream_src/imc-mercbase.h"
 #include "upstream_src/imc-config.h"
 #include "upstream_src/imc.h"
+#endif
 
 #define bug(...) ((void)0)
 #define ch_printf(...) ((void)0)
