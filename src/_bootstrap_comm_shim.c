@@ -81,6 +81,12 @@ void remap_slot_numbers(void) {}
 void stop_editing(CHAR_DATA *ch) {}
 void fold_area(AREA_DATA *tarea, char *filename, bool install) {}
 
+/* db.c — temporarily stub the directory-walk init steps until the
+ * runtime-data parsing path is debugged. These are fine to bypass for
+ * a bootstrap run. */
+void make_wizlist(void) {}
+void make_retiredlist(void) {}
+
 /* update.c — full file blocked on IRBuilder::coerce() unsupported. Stubs: */
 void remove_portal(OBJ_DATA *portal) {}
 void advance_level(CHAR_DATA *ch) {}
