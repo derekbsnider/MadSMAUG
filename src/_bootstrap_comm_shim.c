@@ -96,6 +96,16 @@ int skill_lookup(const char *name)
     return -1;
 }
 
+/* number_range stub — the upstream version raises SIGFPE in some
+ * runtime path during area_update; pin to `from` to keep boot moving */
+int number_range(int from, int to)
+{
+    if (to <= from) return from;
+    return from;
+}
+
+
+
 
 
 /* update.c — full file blocked on IRBuilder::coerce() unsupported. Stubs: */
