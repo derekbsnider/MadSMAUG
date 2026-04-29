@@ -81,13 +81,14 @@
 #include "ident.c"
 #include "interp.c"
 
-// Both function-scope and file-scope writes to fpLOG/fpReserve from
-// our SMAUG.mad don't reach the db.c-defined globals — madc seems to
-// shadow them. Workaround: stub boot_log so the fclose(fpLOG) crash
-// doesn't fire (handled in _bootstrap_comm_shim.c).
+// fpLOG/fpReserve are db.c-defined globals; SMAUG's bug() does
+// fclose(fpLOG) on every diagnostic. Initialize them to /dev/null
+// (read mode) so the close-and-reopen pattern doesn't crash.
 
 int main(int argc, char **argv)
 {
+    fpLOG = fopen("/dev/null", "r");
+    fpReserve = fopen("/dev/null", "r");
     fprintf(stderr, "[init] fpLOG=%p fpReserve=%p\n", (void*)fpLOG, (void*)fpReserve);
     fputs("[probe] before boot_db\n", stdout); fflush(stdout);
     boot_db();

@@ -87,6 +87,17 @@ void fold_area(AREA_DATA *tarea, char *filename, bool install) {}
 void make_wizlist(void) {}
 void make_retiredlist(void) {}
 
+/* magic.c::skill_lookup — bypass while debugging the lookup path; the
+ * real one segfaults inside bsearch_skill_exact's `skill_table[sn]->name`
+ * load before the gsn assignments complete. Returning -1 just makes
+ * each ASSIGN_GSN print a "skill not found" warning to stderr. */
+int skill_lookup(const char *name)
+{
+    return -1;
+}
+
+
+
 /* update.c — full file blocked on IRBuilder::coerce() unsupported. Stubs: */
 void remove_portal(OBJ_DATA *portal) {}
 void advance_level(CHAR_DATA *ch) {}
