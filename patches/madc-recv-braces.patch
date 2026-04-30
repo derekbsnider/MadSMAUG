@@ -1,0 +1,22 @@
+--- a/upstream/smaug1.8/src/comm.c	2007-05-28 21:16:25.000000000 +0000
++++ b/upstream/smaug1.8/src/comm.c	2026-04-30 14:55:01.365127802 +0000
+@@ -1132,7 +1132,9 @@
+ 	{
+ 	    iStart += nRead;
+ 	    if ( d->inbuf[iStart-1] == '\n' || d->inbuf[iStart-1] == '\r' )
++	    {
+ 		break;
++	    }
+ 	}
+ 	else if ( nRead == 0 )
+ 	{
+@@ -1140,7 +1142,9 @@
+ 	    return FALSE;
+ 	}
+ 	else if ( iErr == EWOULDBLOCK )
++	{
+ 	    break;
++	}
+ 	else
+ 	{
+ 	    perror( "Read_from_descriptor" );
