@@ -1,0 +1,30 @@
+Upstream SMAUG echo-state bug — echo_on_str sent after the color
+preference prompt (in CON_GET_WANT_RIPANSI) instead of before it
+(at the end of CON_CONFIRM_NEW_PASSWORD).  The user types the
+password retype with echo off, then the color preference prompt
+appears, but echo is still off — the user's "ANSI"/"RIP"/"none"
+selection is invisible until they hit return.  Move the IAC
+WONT ECHO so it is sent immediately after the password is
+confirmed, before the next prompt.
+
+This is a SMAUG bug, not a madc workaround, but lives here for the
+same reason the rest of the patches do: the upstream tarball is the
+authoritative source and we don't fork it.
+
+--- a/upstream/smaug1.8/src/comm.c
++++ b/upstream/smaug1.8/src/comm.c
+@@ -1890,13 +1890,13 @@
+ 	    return;
+ 	}
+
++	write_to_buffer( d, echo_on_str, 0 );
+ 	write_to_buffer( d, "\n\rPlease select your color preference\n\r ANSI\n\r RIP\n\r No color support\n\r: ", 0 );
+ 	d->connected = CON_GET_WANT_RIPANSI;
+         break;
+
+
+     case CON_GET_WANT_RIPANSI:
+-	write_to_buffer( d, echo_on_str, 0 );
+ 	switch ( argument[0] )
+ 	{
+ 	case 'r': case 'R':
