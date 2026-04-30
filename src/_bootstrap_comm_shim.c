@@ -40,11 +40,18 @@
 /* (A) act — global fmt state not fully wired */
 void act(sh_int AType, const char *format, CHAR_DATA *ch, const void *arg1, const void *arg2, int type) {}
 
-/* (B) skill / slot lookup against the empty skill_table */
-int skill_lookup(const char *name) { return -1; }
+/* slot_lookup: still stubbed. With load_skill_table running for
+ * real, calling the upstream slot_lookup during boot_db's object
+ * loading still abort()s — some objects reference spell slots
+ * not present in skills.dat. Returning -1 lets boot proceed and
+ * those objects just get no spell affect bound. skill_lookup
+ * (string-by-name) works fine now and is no longer stubbed. */
 int slot_lookup(int slot) { return -1; }
 
-/* (D) number_range — divides by (to-from), pin to from */
+/* number_range: keep stubbed. Real upstream has a guard against
+ * (to-from)<1 but still SIGFPEs on `n % (to-from+1)` — an asmjit
+ * codegen issue with the post-guard modulo, not the C source.
+ * Pin to `from` until that's diagnosed. */
 int number_range(int from, int to)
 {
     if (to <= from) return from;
@@ -57,38 +64,10 @@ void to_channel(const char *argument, int channel, const char *verb, sh_int leve
 /* (F) boot_log — variadic-fmt path wedges */
 void boot_log(const char *str, ...) { return; }
 
-/* (C) tables.c — load_commands now works (the silent-exit was
- * adjacent-string-literal concat in COMMAND_FILE; fixed in madc
- * lexer). load_skill_table / load_classes / load_races etc. likely
- * follow the same pattern; un-stubbing one at a time. */
+/* (C) tables.c — load_commands now works after the
+ * adjacent-string-literal concat fix (madc commit c41df84).
+ * Trying to peel the rest at once. */
 
-/* (J) house.c loaders */
-void load_homedata(void) {}
-void load_accessories(void) {}
-void load_homebuy(void) {}
-int  get_secflag(char *flag) { return 0; }
+/* (J), (I) — try unstubbing in light of the lexer concat fix */
 
-/* (I) make_wizlist / make_retiredlist */
-void make_wizlist(void) {}
-void make_retiredlist(void) {}
-
-/* (G) update.c tick handlers — un-stubbing these crashes during
- * the per-pulse violence_update / mobile_update / char_update
- * walk: NULL-deref at small struct offsets (update.c:2329 +0x18,
- * fight.c:3327). The simulation gets far enough to log
- * "X hit a DEATH TRAP in room N" before hitting the deref. */
-void mobile_update(void) {}
-void char_update(void) {}
-void obj_update(void) {}
-void aggr_update(void) {}
-void tele_update(void) {}
-void auth_update(void) {}
-void update_handler(void) {}
-void auction_update(void) {}
-void char_check(void) {}
-void reboot_check(int64_t reset) {}
-void advance_level(CHAR_DATA *ch) {}
-void gain_exp(CHAR_DATA *ch, int gain) {}
-void gain_condition(CHAR_DATA *ch, int iCond, int value) {}
-void remove_portal(OBJ_DATA *portal) {}
-void delete_variable(VARIABLE_DATA *vd) {}
+/* (G) update.c tick handlers — try unstubbing now */

@@ -105,6 +105,26 @@ int main(int argc, char **argv)
     boot_time = time(0);
     strcpy(str_boot_time, ctime(&current_time));
 
+    // Mirror upstream main()'s reboot-time setup. Without
+    // set_boot_time pointing at its struct, update.c:2329's
+    // `set_boot_time->manual` deref crashes the per-pulse
+    // reboot_check.
+    set_boot_time = &set_boot_time_struct;
+    set_boot_time->manual = 0;
+    new_boot_time   = update_time(localtime(&current_time));
+    new_boot_struct = *new_boot_time;
+    new_boot_time   = &new_boot_struct;
+    new_boot_time->tm_mday += 1;
+    if (new_boot_time->tm_hour > 12)
+        new_boot_time->tm_mday += 1;
+    new_boot_time->tm_sec  = 0;
+    new_boot_time->tm_min  = 0;
+    new_boot_time->tm_hour = 6;
+    new_boot_time   = update_time(new_boot_time);
+    new_boot_struct = *new_boot_time;
+    new_boot_time   = &new_boot_struct;
+    new_boot_time_t = mktime(new_boot_time);
+
     fpLOG     = fopen("/dev/null", "r");
     fpReserve = fopen("/dev/null", "r");
     fprintf(stderr, "[init] fpLOG=%p fpReserve=%p\n", (void*)fpLOG, (void*)fpReserve);
