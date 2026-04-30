@@ -16,8 +16,20 @@
  *     signed Mem). The abort path, not arg passing, was the real
  *     trigger.
  *
- *   act / to_channel / boot_log: empty. Variadic-format-arg
- *     pipeline corrupts the heap when un-stubbed.
+ *   act: empty. Tried un-stubbing 2026-04-30 — boot reaches
+ *     `Reading in area files... (help.are)` and crashes during
+ *     the imc-help.are duplicate-entry handling with
+ *     `malloc(): corrupted top size` (heap corruption inside a
+ *     libc dlopen path). act() itself isn't called during boot,
+ *     so something its compile pulls in disturbs the funcnode
+ *     layout — likely candidates are the transitively-referenced
+ *     {r,o,m}prog_act_trigger helpers or one of act_string's
+ *     static-local buffers. Needs proper bisection; revert kept
+ *     in for now.
+ *
+ *   to_channel / boot_log: empty. Variadic-format-arg pipeline
+ *     was reported to corrupt the heap; revisit once act() is
+ *     stable.
  */
 int slot_lookup(int slot) { return -1; }
 void act(sh_int AType, const char *format, CHAR_DATA *ch, const void *arg1, const void *arg2, int type) {}
