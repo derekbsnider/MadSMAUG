@@ -16,16 +16,25 @@
  *     signed Mem). The abort path, not arg passing, was the real
  *     trigger.
  *
- *   act: empty. Tried un-stubbing 2026-04-30 — boot reaches
- *     `Reading in area files... (help.are)` and crashes during
- *     the imc-help.are duplicate-entry handling with
- *     `malloc(): corrupted top size` (heap corruption inside a
- *     libc dlopen path). act() itself isn't called during boot,
- *     so something its compile pulls in disturbs the funcnode
- *     layout — likely candidates are the transitively-referenced
- *     {r,o,m}prog_act_trigger helpers or one of act_string's
- *     static-local buffers. Needs proper bisection; revert kept
- *     in for now.
+ *   act: empty. The previous "act un-stub corrupts the heap"
+ *     diagnosis is misleading. Bisection (2026-04-30) showed
+ *     that ANY runtime that reaches the second area_update tick
+ *     now crashes deterministically at the same JIT offset
+ *     +0x170771, which the source-map points at mud_prog.c:2437
+ *     (`while ((*point = *i) != '\0') ++point, ++i;`). mud_prog
+ *     does unbounded `point++ = ...` writes into a stack-local
+ *     `char buf[MAX_INPUT_LENGTH]` — buffer overflow. With pre-
+ *     enum-const-fold-fix JIT layout, the overflow stomped
+ *     adjacent stack memory silently; the v0.12.0+ JIT region
+ *     grew enough (more compact xor-zero encodings replaced by
+ *     mov-imm now that ioperate() returns real enum values) to
+ *     shift the stack so `point` walks into an unmapped page.
+ *     Real fix is bounds-checking inside mud_prog or a per-mob-
+ *     program guard buffer — out of scope for the as-is port.
+ *     Workaround paths to consider: skip mob-program execution
+ *     entirely (stub mprog_act_trigger / rprog_* / oprog_*) or
+ *     bump MAX_INPUT_LENGTH in mud.h (risky — changes struct
+ *     layouts).
  *
  *   to_channel / boot_log: empty. Variadic-format-arg pipeline
  *     was reported to corrupt the heap; revisit once act() is
