@@ -48,15 +48,9 @@ void act(sh_int AType, const char *format, CHAR_DATA *ch, const void *arg1, cons
  * (string-by-name) works fine now and is no longer stubbed. */
 int slot_lookup(int slot) { return -1; }
 
-/* number_range: keep stubbed. Real upstream has a guard against
- * (to-from)<1 but still SIGFPEs on `n % (to-from+1)` — an asmjit
- * codegen issue with the post-guard modulo, not the C source.
- * Pin to `from` until that's diagnosed. */
-int number_range(int from, int to)
-{
-    if (to <= from) return from;
-    return from;
-}
+/* number_range: try unstubbed now that left-associative arithmetic
+ * is fixed in the parser — earlier SIGFPE was likely
+ * `to-from+1` parsing as `to-(from+1)` and divisor going to 0. */
 
 /* (E) to_channel — asmjit codegen corrupts caller frames */
 void to_channel(const char *argument, int channel, const char *verb, sh_int level) { return; }
