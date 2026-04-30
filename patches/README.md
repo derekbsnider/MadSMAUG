@@ -10,20 +10,9 @@ for p in patches/*.patch; do
 done
 ```
 
-## madc-fgetc-loop.patch
+## smaug-echo-color-prompt.patch
 
-Replaces the chained `(buf[i] = fgetc(fp)) != EOF` idiom in
-`act_comm.c` (4 sites in `send_*_title`) and `db.c` (2 sites in
-`show_file` / `show_file_vnum`) with an int-intermediate loop so
-the EOF compare actually terminates under madc.
-
-madc's int is 64-bit by design, but a chained subscript assignment
-to a char element returns the unbound RHS register's full int —
-not the truncated-and-extended char value the C standard requires.
-The loop ran past EOF, walked off `BUFF`, and eventually crashed
-inside libc's fgetc on a corrupted FILE* pointer.
-
-The straightforward `(c = fgetc(fp))` variant where `c` is a TokenVar
-local works correctly under madc develop ≥ c35824f. The
-TokenSubscript / TokenSubscriptExpr variants are queued for a
-follow-up codegen fix; until then this patch keeps SMAUG bootable.
+Upstream SMAUG sends `IAC WONT ECHO` in `CON_GET_WANT_RIPANSI` (after
+the user types) instead of at the end of `CON_CONFIRM_NEW_PASSWORD`
+(before the prompt).  Move the IAC sequence so the colour-preference
+selection echoes for the user.
