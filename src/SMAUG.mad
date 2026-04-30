@@ -87,12 +87,51 @@
 
 int main(int argc, char **argv)
 {
-    fpLOG = fopen("/dev/null", "r");
+    int port = 4000;
+    if (argc > 1)
+        port = atoi(argv[1]);
+    if (port <= 1024) port = 4000;
+
+    DONT_UPPER       = FALSE;
+    num_descriptors  = 0;
+    first_descriptor = NULL;
+    last_descriptor  = NULL;
+    sysdata.NO_NAME_RESOLVING = TRUE;
+    sysdata.WAIT_FOR_AUTH     = TRUE;
+
+    struct timeval now_time;
+    gettimeofday(&now_time, NULL);
+    current_time = (long)now_time.tv_sec;
+    boot_time = time(0);
+    strcpy(str_boot_time, ctime(&current_time));
+
+    fpLOG     = fopen("/dev/null", "r");
     fpReserve = fopen("/dev/null", "r");
     fprintf(stderr, "[init] fpLOG=%p fpReserve=%p\n", (void*)fpLOG, (void*)fpReserve);
     fputs("[probe] before boot_db\n", stdout); fflush(stdout);
     boot_db();
     fputs("[probe] after boot_db\n", stdout); fflush(stdout);
-    exit(0);
+    // SMAUG's help-loader assigns help_greeting from the "greeting"
+    // help entry's text. If no such help loads — e.g. our cut-down
+    // boot leaves help.are with no entries by that keyword — the
+    // global stays NULL and new_descriptor crashes on
+    // help_greeting[0]. Plant a safe banner unconditionally after
+    // boot_db so any partial load is overridden too.
+    help_greeting = "Welcome to MadSMAUG.\r\nBy what name do you wish to be known? ";
+    fprintf(stdout, "[probe] help_greeting=%p\n", (void*)help_greeting);
+    fflush(stdout);
+
+    fputs("[probe] before init_socket\n", stdout); fflush(stdout);
+    control   = init_socket(port);
+    control2  = init_socket(port + 1);
+    conclient = init_socket(port + 10);
+    conjava   = init_socket(port + 20);
+    fprintf(stdout, "[probe] sockets ready: control=%d port=%d\n", control, port);
+    fflush(stdout);
+
+    fputs("[probe] entering game_loop\n", stdout); fflush(stdout);
+    game_loop();
+    fputs("[probe] game_loop returned\n", stdout); fflush(stdout);
+
     return 0;
 }

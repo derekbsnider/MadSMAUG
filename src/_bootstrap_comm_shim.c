@@ -5,12 +5,9 @@
  * real upstream sources.
  */
 
-/* comm.c — real descriptor / socket / color code not yet in scope */
-void send_to_char(const char *txt, CHAR_DATA *ch) {}
-void write_to_buffer(DESCRIPTOR_DATA *d, const char *txt, int length) {}
-void send_to_char_color(const char *txt, CHAR_DATA *ch) {}
-void send_to_pager(const char *txt, CHAR_DATA *ch) {}
-void set_char_color(sh_int AType, CHAR_DATA *ch) {}
+/* comm.c — un-stubbed in session 12 night so the upstream definitions
+ * win the funcnode-dedupe race. Keep act() stubbed for now (the real
+ * implementation depends on more global state we haven't fully wired). */
 void act(sh_int AType, const char *format, CHAR_DATA *ch, const void *arg1, const void *arg2, int type) {}
 
 /* mud_prog.c — uses `goto` labels not yet supported.
@@ -92,6 +89,15 @@ void make_retiredlist(void) {}
  * load before the gsn assignments complete. Returning -1 just makes
  * each ASSIGN_GSN print a "skill not found" warning to stderr. */
 int skill_lookup(const char *name)
+{
+    return -1;
+}
+
+/* magic.c::slot_lookup — abort()s during boot if the slot isn't in
+ * skill_table, but our cut-down boot stubs load_skill_table so the
+ * table is empty. Return -1 unconditionally; object loading callers
+ * just skip the affect / spell-binding step. */
+int slot_lookup(int slot)
 {
     return -1;
 }
