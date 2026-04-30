@@ -57,23 +57,10 @@ void to_channel(const char *argument, int channel, const char *verb, sh_int leve
 /* (F) boot_log — variadic-fmt path wedges */
 void boot_log(const char *str, ...) { return; }
 
-/* (C, H) tables.c data-file loaders — exit silently inside
- * skill_function / fread_command. Real path forward: diagnose
- * skill_function NULL-return / segfault. */
-void load_commands(void) {}
-void load_skill_table(void) {}
-void load_herb_table(void) {}
-void load_socials(void) {}
-void load_tongues(void) {}
-void load_classes(void) {}
-void load_races(void) {}
-void save_commands(void) {}
-void save_skill_table(void) {}
-void save_herb_table(void) {}
-void save_socials(void) {}
-void save_classes(void) {}
-void sort_skill_table(void) {}
-void remap_slot_numbers(void) {}
+/* (C) tables.c — load_commands now works (the silent-exit was
+ * adjacent-string-literal concat in COMMAND_FILE; fixed in madc
+ * lexer). load_skill_table / load_classes / load_races etc. likely
+ * follow the same pattern; un-stubbing one at a time. */
 
 /* (J) house.c loaders */
 void load_homedata(void) {}
