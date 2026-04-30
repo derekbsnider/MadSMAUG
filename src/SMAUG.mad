@@ -76,10 +76,9 @@
 #include "upstream_src/services.c"
 #include "upstream_src/mpxset.c"
 #include "upstream_src/shops.c"
-#include "ibuild.c"
-#include "ident.c"
-#include "interp.c"
-#include "_bootstrap_comm_shim.c"  // last so dedupe favors shim wrappers
+#include "upstream_src/ibuild.c"
+#include "upstream_src/ident.c"
+#include "upstream_src/interp.c"
 
 // fpLOG/fpReserve are db.c-defined globals; SMAUG's bug() does
 // fclose(fpLOG) on every diagnostic. Initialize them to /dev/null

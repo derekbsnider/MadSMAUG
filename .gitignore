@@ -1,6 +1,31 @@
 # Extracted upstream SMAUG tree — can always be re-created from the
 # tarball. Keeping the tarball itself in git for provenance.
 upstream/smaug1.8/
+upstream/smaug18
+upstream/ftp_game.org
+
+# Writable runtime data tree created by MadSMAUG.sh.
+runtime/
+
+# Local mirror copies of upstream headers / sources that were made by
+# earlier sessions; the canonical copies live under upstream/smaug1.8/src
+# and are surfaced via the src/upstream_src symlink.
+src/bet.h
+src/hashstr.c
+src/hint.h
+src/house.h
+src/ibuild.c
+src/ice.h
+src/icec-mercbase.h
+src/icec.h
+src/ident.c
+src/imc-config.h
+src/imc-mercbase.h
+src/imc-mercdefs.h
+src/imc.h
+src/interp.c
+src/mud.h
+src/news.h
 
 # Runtime data directories (if a MUD is actually run from this tree).
 area/
