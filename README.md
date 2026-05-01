@@ -48,4 +48,4 @@ https://github.com/derekbsnider/madc.
 - [madc](https://github.com/derekbsnider/madc) — the language / JIT
   compiler this project is built on.
 - `upstream/smaug1.8.tgz` — original SMAUG 1.8 source tarball,
-  preserved for reference and extraction of files as they are ported.
+  madc uses these source files directly with a small SMAUG.mad shim.
