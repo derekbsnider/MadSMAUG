@@ -1,10 +1,10 @@
 # MadSMAUG
 
-A port of the [SMAUG 1.8](https://en.wikipedia.org/wiki/SMAUG) MUD
-codebase to the [Mad-C (madc)](https://github.com/derekbsnider/madc)
+A small project to set up the the [SMAUG 1.8](https://en.wikipedia.org/wiki/SMAUG)
+MUD codebase to run using the [Mad-C (madc)](https://github.com/derekbsnider/madc)
 programming language.
 
-The goal is to run the full ~158k-line SMAUG 1.8 server *without* a
+The goal was to run the full ~158k-line SMAUG 1.8 server *without* a
 separate C toolchain — madc JIT-compiles the `.mad` sources to
 x86-64 machine code in-process.
 
