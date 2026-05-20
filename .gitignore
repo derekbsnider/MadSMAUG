@@ -12,6 +12,7 @@ runtime/
 # and are surfaced via the src/upstream_src symlink.
 src/bet.h
 src/hashstr.c
+src/hashstr.mad
 src/hint.h
 src/house.h
 src/ibuild.c
@@ -26,6 +27,17 @@ src/imc.h
 src/interp.c
 src/mud.h
 src/news.h
+
+# Scratch / reducer / temp files in src/
+src/ROD_*.mad
+src/ROD.mad
+src/*_tmp.mad
+src/*_tmp.c
+src/rod_*.mad
+src/libpq-fe.h
+
+# Rod work directory
+rod/
 
 # Runtime data directories (if a MUD is actually run from this tree).
 area/

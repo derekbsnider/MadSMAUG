@@ -1,36 +1,81 @@
 # MadSMAUG
 
-A small project to set up the the [SMAUG 1.8](https://en.wikipedia.org/wiki/SMAUG)
-MUD codebase to run using the [Mad-C (madc)](https://github.com/derekbsnider/madc)
+A port of the [SMAUG 1.8](https://en.wikipedia.org/wiki/SMAUG) MUD
+codebase to the [Mad-C (madc)](https://github.com/derekbsnider/madc)
 programming language.
 
-The goal was to run the full ~158k-line SMAUG 1.8 server *without* a
-separate C toolchain — madc JIT-compiles the `.mad` sources to
-x86-64 machine code in-process.
+SMAUG is a MUD (Multi-User Dungeon) engine originally written in C by
+[Derek Snider](https://github.com/derekbsnider) in the 1990s, building
+on the Merc/Diku MUD lineage. It became one of the most widely used
+MUD codebases in the online gaming community. The full codebase is
+roughly 158,000 lines of C across hundreds of source files.
+
+The goal of MadSMAUG is to run the entire SMAUG 1.8 server using madc
+— no separate C toolchain required. madc JIT-compiles the `.mad`
+sources directly to x86-64 machine code in-process, or can produce a
+standalone native Linux executable.
 
 ## Status
 
-Phase F (source port) — in progress.
+**SMAUG runs end-to-end on madc** — both JIT and as a native executable.
 
-- ✅ `src/hashstr.mad` — complete, compiles and runs end-to-end via
-  `SMAUG.mad`, produces correct link-count hash stats.
-- ⏳ Next target: to be decided (config / mud.h equivalents, then
-  tables.c, db.c, comm.c …).
+The server reaches the telnet greeting, supports full character
+creation, room navigation, and combat. The standalone `smaug.exe` native
+executable survives repeated combat rounds and can complete the Newgate
+room 109 serpent fight cleanly.
 
-See `docs/port-progress.md` for the gap analysis and
-file-by-file progress.
+| Phase       |   % | Notes |
+|-------------|----:|-------|
+| **Parse**   | ~86% | 136k of 158k lines ingested. 49 upstream translation units. |
+| **Compile** | ~86% | Every ingested TU compiles cleanly. |
+| **Link**    | ~95% | All 1878 user-defined functions bind labels. |
+| **Runtime** | ~99% | JIT and native EXE both survive login, movement, and combat. |
+
+See `docs/port-progress.md` for detailed file-by-file status.
+
+### Remaining work
+
+- 3 deferred translation units (`variables.c`, `update.c`, `build.c`)
+- IMC (MUD-network federation) sources — deferred to post-core
+- Broader post-combat gameplay: additional encounters, spells,
+  mobprogs, and longer session stability
 
 ## Building
 
-Requires a madc binary on `PATH` (or pointed at via `$MADC`).
+Requires a [madc](https://github.com/derekbsnider/madc) binary on
+`PATH` (or pointed at via `$MADC`).
+
+### JIT mode (run directly)
 
 ```bash
 bin/madc SMAUG.mad
 ```
 
-`SMAUG.mad` is the top-level bootstrap file; it `#include`s every
-ported source in dependency order with `int main()` last. See the
-madc README for the app-named bootstrap convention.
+### Native executable
+
+```bash
+madc -o smaug SMAUG.mad
+./smaug
+```
+
+`SMAUG.mad` is the top-level bootstrap file — it `#include`s every
+ported source in dependency order with `int main()` last.
+
+### Runtime data setup
+
+SMAUG needs a writable data directory tree. Quick setup using the
+upstream data:
+
+```bash
+mkdir -p /tmp/smaug_run && cd /tmp/smaug_run
+for d in gods player boards classes clans races; do
+  ln -sfn /path/to/MadSMAUG/upstream/smaug1.8/$d $d
+done
+cp -rL /path/to/MadSMAUG/upstream/smaug1.8/area area
+cp -rL /path/to/MadSMAUG/upstream/smaug1.8/system system
+```
+
+Then run from that directory.
 
 ## License
 
@@ -47,5 +92,7 @@ https://github.com/derekbsnider/madc.
 
 - [madc](https://github.com/derekbsnider/madc) — the language / JIT
   compiler this project is built on.
-- `upstream/smaug1.8.tgz` — original SMAUG 1.8 source tarball,
+  See the [madc wiki](https://github.com/derekbsnider/madc/wiki) for
+  language documentation and guides.
+- `upstream/smaug1.8.tgz` — original SMAUG 1.8 source tarball;
   madc uses these source files directly with a small SMAUG.mad shim.
