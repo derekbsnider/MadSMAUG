@@ -1,8 +1,8 @@
 # MadSMAUG
 
-A port of the [SMAUG 1.8](https://en.wikipedia.org/wiki/SMAUG) MUD
-codebase to the [Mad-C (madc)](https://github.com/derekbsnider/madc)
-programming language.
+Running the [SMAUG 1.8](https://en.wikipedia.org/wiki/SMAUG) MUD
+codebase on the [Mad-C (madc)](https://github.com/derekbsnider/madc)
+compiler — compiling the original C source directly, not a port.
 
 SMAUG is a MUD (Multi-User Dungeon) engine originally written in C by
 [Derek Snider](https://github.com/derekbsnider) in the 1990s, building
@@ -10,9 +10,9 @@ on the Merc/Diku MUD lineage. It became one of the most widely used
 MUD codebases in the online gaming community. The full codebase is
 roughly 158,000 lines of C across hundreds of source files.
 
-The goal of MadSMAUG is to run the entire SMAUG 1.8 server using madc
-— no separate C toolchain required. madc JIT-compiles the `.mad`
-sources directly to x86-64 machine code in-process, or can produce a
+MadSMAUG compiles and runs the original SMAUG 1.8 C source using madc
+— no separate C toolchain required. madc JIT-compiles the sources
+directly to x86-64 machine code in-process, or can produce a
 standalone native Linux executable.
 
 ## Status
@@ -31,7 +31,7 @@ room 109 serpent fight cleanly.
 | **Link**    | ~95% | All 1878 user-defined functions bind labels. |
 | **Runtime** | ~99% | JIT and native EXE both survive login, movement, and combat. |
 
-See `docs/port-progress.md` for detailed file-by-file status.
+See [smaug-progress.md](https://github.com/derekbsnider/madc/blob/master/docs/smaug-progress.md) in the madc repo for detailed file-by-file status.
 
 ### Remaining work
 
@@ -57,8 +57,8 @@ madc -o smaug SMAUG.mad
 ./smaug
 ```
 
-`SMAUG.mad` is the top-level bootstrap file — it `#include`s every
-ported source in dependency order with `int main()` last.
+`SMAUG.mad` is the top-level bootstrap file — it `#include`s the
+original upstream C sources in dependency order with `int main()` last.
 
 ### Runtime data setup
 
