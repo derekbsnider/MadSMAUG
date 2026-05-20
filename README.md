@@ -1,8 +1,8 @@
 # MadSMAUG
 
 Running the [SMAUG 1.8](https://en.wikipedia.org/wiki/SMAUG) MUD
-codebase on the [Mad-C (madc)](https://github.com/derekbsnider/madc)
-compiler — compiling the original C source directly, not a port.
+codebase using [Mad-C (madc)](https://github.com/derekbsnider/madc)
+JIT compiling the original C source directly.
 
 SMAUG is a MUD (Multi-User Dungeon) engine originally written in C by
 [Derek Snider](https://github.com/derekbsnider) in the 1990s, building
