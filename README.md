@@ -35,7 +35,6 @@ See `docs/port-progress.md` for detailed file-by-file status.
 
 ### Remaining work
 
-- 3 deferred translation units (`variables.c`, `update.c`, `build.c`)
 - IMC (MUD-network federation) sources — deferred to post-core
 - Broader post-combat gameplay: additional encounters, spells,
   mobprogs, and longer session stability
